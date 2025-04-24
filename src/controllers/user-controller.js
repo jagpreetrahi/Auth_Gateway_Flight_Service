@@ -14,11 +14,29 @@ async function createUser(req , res) {
         SuccessResponse.data = user
         return res.status(StatusCodes.CREATED).json(SuccessResponse)
     } catch (error) {
+        
+        ErrorResponse.error = error;
+        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
+    }
+}
+
+async function signInUser(req , res) {
+
+    try {
+        const user = await UserService.signIn({
+            email : req.body.email,
+            password : req.body.password
+        })
+        SuccessResponse.data = user
+        return res.status(StatusCodes.CREATED).json(SuccessResponse)
+    } catch (error) {
+        
         ErrorResponse.error = error;
         return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse)
     }
 }
 
 module.exports = {
-    createUser
+    createUser,
+    signInUser
 }
