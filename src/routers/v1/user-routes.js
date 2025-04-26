@@ -9,4 +9,9 @@ router.post('/signUp',
     UserController.createUser
 )
 
+router.post('/signIn',
+    UserMiddleware.checkAuthenticate,
+    UserController.signInUser
+)
+
 module.exports = router;
