@@ -6,6 +6,13 @@ const Seat_types = {
 
 }
 
+const Role_types = {
+    ADMIN : 'admin',
+    FLIGHT_COMPANY : 'flight_company',
+    CUSTOMER : 'customer'
+}
+
 module.exports = {
-    Seat_types
+    Seat_types,
+    Role_types
 }
