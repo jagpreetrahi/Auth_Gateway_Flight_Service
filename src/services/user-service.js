@@ -59,12 +59,15 @@ async function isAuthenticated(token){
             throw new AppError("Token is missing" , StatusCodes.BAD_REQUEST)
         }
         const response = Auth.verifyToken(token);
-        const user = await userRepo.get(response);
+       
+        const user = await userRepo.get(response.id);
+        
         if(!user){
             throw new AppError("No user found" , StatusCodes.NOT_FOUND)
         }
-        return user.id;
+        return user;
     } catch (error) {
+        
         if(error instanceof AppError) throw error;
         if(error.name == 'JsonWebTokenError'){
             throw new AppError('Invalid jwt token' , StatusCodes.BAD_REQUEST)
