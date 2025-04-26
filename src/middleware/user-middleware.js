@@ -6,18 +6,18 @@ const validateCreateUser = (req, res ,next) => {
   
     
     const message = "Something went wrong while creating a User";
-    if(!req.body.FirstName){
-        ErrorResponse.message = message;
-        ErrorResponse.error = {explanation :  "You are not providing the correct details"}
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    // if(!req.body.FirstName){
+    //     ErrorResponse.message = message;
+    //     ErrorResponse.error = {explanation :  "You are not providing the correct details"}
+    //     return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
 
-    }
-    if(!req.body.LastName){
-        ErrorResponse.message = message;
-        ErrorResponse.error = {explanation :  "You are not providing the correct details"}
-        return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
+    // }
+    // if(!req.body.LastName){
+    //     ErrorResponse.message = message;
+    //     ErrorResponse.error = {explanation :  "You are not providing the correct details"}
+    //     return res.status(StatusCodes.BAD_REQUEST).json(ErrorResponse);
 
-    }
+    // }
     if(!req.body.email){
         ErrorResponse.message = message;
         ErrorResponse.error = {explanation :  "You are not providing the correct details"}
@@ -49,12 +49,13 @@ function checkAuthenticate(req, res , next){
 
     }
 
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers['authorization'];
+    console.log(authHeader)
     ErrorResponse.error = {explanation : "Authentication header not found"}
 
-    if(!authHeader || !authHeader.startsWith('Bearer')){
-        return res.status(StatusCodes.NOT_FOUND).json(ErrorResponse);
-    }
+    // if(!authHeader || !authHeader.startsWith('Bearer')){
+    //     return res.status(StatusCodes.NOT_FOUND).json(ErrorResponse);
+    // }
 
    try {
        const response = UserService.isAuthenticated(authHeader)
@@ -63,7 +64,7 @@ function checkAuthenticate(req, res , next){
            next();
        }
    } catch (error) {
-      return res.status(error.statusCode).json(error)
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(error)
    }
 }
 
