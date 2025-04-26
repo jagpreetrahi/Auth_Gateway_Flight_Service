@@ -27,8 +27,10 @@ async function signInUser(req , res) {
             email : req.body.email,
             password : req.body.password
         })
+        
+        
         SuccessResponse.data = user
-        return res.status(StatusCodes.CREATED).json(SuccessResponse)
+        return res.status(StatusCodes.OK).json(SuccessResponse)
     } catch (error) {
         
         ErrorResponse.error = error;
