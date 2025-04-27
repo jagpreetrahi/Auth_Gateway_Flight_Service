@@ -8,5 +8,8 @@ module.exports = {
     PORT : process.env.PORT,// process.env is to provide an access to all the environment variables
     SALT_ROUNDS : process.env.SALT_ROUNDS,
     JWT_SECRET : process.env.JWT_SECRET,
-    JWT_EXPIRY : process.env.JWT_EXPIRY
+    JWT_EXPIRY : process.env.JWT_EXPIRY,
+    FLIGHT_PROXY : process.env.FLIGHT_PROXY,
+    BOOKING_PROXY : process.env.BOOKING_PROXY,
+    
 }

@@ -23,7 +23,9 @@ function creatToken(inputData){
 
 function verifyToken(token){
     try {
+        console.log("token" , token);
         const verify = jwt.verify(token, ServerConfig.JWT_SECRET);
+        
         return verify;
     } catch (error) {
         throw error;

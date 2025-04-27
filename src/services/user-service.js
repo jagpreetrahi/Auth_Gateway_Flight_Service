@@ -1,16 +1,22 @@
-const {UserRepository} = require('../repository')
+const {UserRepository , RoleRepostiory} = require('../repository')
 const AppError = require('../utils/errors/app-error')
 const {StatusCodes} = require('http-status-codes')
-const {Auth} = require('../utils/common')
+const {Auth ,EnumData} = require('../utils/common')
 
 
 const userRepo = new UserRepository();
 
+const roleRepo = new RoleRepostiory();
+
 
 async function signUp(data){
 
+   
     try {
         const user = await userRepo.create(data);
+        
+        const role = await roleRepo.getUserRole(EnumData.Role_types.CUSTOMER);
+        user.addRole(role)
         return user;
     } catch (error) {
        
@@ -79,13 +85,61 @@ async function isAuthenticated(token){
         throw new AppError("Something went Wrong" , StatusCodes.INTERNAL_SERVER_ERROR)
     }
 
- 
-
-
 }
+
+async function  addRoleToUser(data) {
+
+    try {
+        const user = await userRepo.get(data.id);
+        if(!user){
+            throw new AppError("No user found for the given id" , StatusCodes.NOT_FOUND)
+        }
+
+        const role = await roleRepo.getUserRole(data.role);
+        if(!role){
+            throw new AppError("No user found for the given role" , StatusCodes.NOT_FOUND)
+        }
+
+        user.addRole(role)
+        return user
+    } catch (error) {
+        if(error instanceof AppError) throw error;
+        console.log(error);
+        throw new AppError('Something went wrong', StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+  
+}
+
+async function isAdmin(data) {
+
+    try {
+        
+        const user = await userRepo.get(data.id);
+        if(!user){
+            throw new AppError("No user found for the given id" , StatusCodes.NOT_FOUND)
+        }
+        const adminRole = await roleRepo.getUserRole(EnumData.Role_types.ADMIN);
+        
+        if(!adminRole){
+            throw new AppError("No user found for the given admin role" , StatusCodes.NOT_FOUND)
+        }
+
+        user.hasRole(adminRole)
+        return user;
+    } catch (error) {
+        if(error instanceof AppError) throw error;
+        console.log(error);
+        throw new AppError('Something went wrong', StatusCodes.INTERNAL_SERVER_ERROR)
+    }
+ 
+}
+
+
 
 module.exports = {
     signUp,
     signIn,
-    isAuthenticated
+    isAuthenticated,
+    addRoleToUser,
+    isAdmin
 }

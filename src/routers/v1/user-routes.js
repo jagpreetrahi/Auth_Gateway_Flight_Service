@@ -10,8 +10,16 @@ router.post('/signUp',
 )
 
 router.post('/signIn',
-    UserMiddleware.checkAuthenticate,
+    UserMiddleware.validateCreateUser,
     UserController.signInUser
 )
+
+router.post('/role',
+    UserMiddleware.checkAuthenticate,
+    UserMiddleware.isAdmin,
+    UserController.addRoleToUser
+)
+
+
 
 module.exports = router;
